@@ -13,23 +13,40 @@ namespace SignalRService
     {
         public override Task OnConnected()
         {
-            var c = this.Clients;
-            c.All.notice("大家注意有人来了");
+            var username = this.Context.QueryString["username"];
+            var groupName= this.Context.QueryString["groupname"];
+            JoinGroup(groupName);
+            Clients.Group(groupName).addMessage(1,$"有人重连了,username:{username}");
             return base.OnConnected();
         }
 
         public override Task OnReconnected()
         {
-            Console.WriteLine("有个人重连了");
+            var username = this.Context.QueryString["username"];
+            string groupName = this.Context.QueryString["groupname"];
+            JoinGroup(groupName);
+            Clients.Group(groupName).addMessage(2,$"有人重连了,username:{username}");
             return base.OnReconnected();
         }
 
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            var c = this.Clients.Caller;
-            this.Clients.All.notice("有人断开了 ,他是" + this.Context.ConnectionId);
+            var username = this.Context.QueryString["username"];
+            string groupName = this.Context.QueryString["groupname"];
+            LeaveGroup(groupName);
+            Clients.Group(groupName).addMessage(3,$"有人断开连接了,username:{username}");
             return base.OnDisconnected(stopCalled);
         }
+        public Task JoinGroup(string groupName)
+        {
+            return Groups.Add(Context.ConnectionId, groupName);
+        }
+
+        public Task LeaveGroup(string groupName)
+        {
+            return Groups.Remove(Context.ConnectionId, groupName);
+        }
+
     }
 }

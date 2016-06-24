@@ -11,14 +11,14 @@ namespace SignalRService.Controller
     public class PushController: ApiController
     {
         [HttpGet]
-        public string Test(string msg)
+        public string Test(string serviceName,string msg)
         {
             if (string.IsNullOrEmpty(msg))
             {
                 return "no";
             }
             IHubContext chat = GlobalHost.ConnectionManager.GetHubContext<LogHub>();
-            chat.Clients.All.notice(msg);
+            chat.Clients.Group(serviceName).notice(msg);
             return "ok";
         }
     }
