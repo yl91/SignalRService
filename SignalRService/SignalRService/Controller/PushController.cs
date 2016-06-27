@@ -19,6 +19,8 @@ namespace SignalRService.Controller
             }
             IHubContext chat = GlobalHost.ConnectionManager.GetHubContext<LogHub>();
             chat.Clients.Group(serviceName).notice(msg);
+
+
             return "ok";
         }
     }

@@ -22,7 +22,7 @@ namespace SignalRService
 
             app.Map("", map => {
                 map.UseCors(CorsOptions.AllowAll);
-                var hubConfig = new HubConfiguration() { EnableJSONP = true };
+                var hubConfig = new HubConfiguration() { EnableJSONP = false };
                 map.RunSignalR(hubConfig);
             });
         }
