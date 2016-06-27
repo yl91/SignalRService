@@ -24,6 +24,7 @@ namespace SignalRService
         {
             var username = this.Context.QueryString["username"];
             string groupName = this.Context.QueryString["groupname"];
+            LeaveGroup(groupName);
             JoinGroup(groupName);
             Clients.Group(groupName).addMessage(2,$"有人重连了,username:{username}");
             return base.OnReconnected();
